@@ -1,0 +1,63 @@
+```js
+var fullName = 'language'
+var obj = {
+    fullName: 'javascript'
+    prop: {
+        getFullName: function() {
+            return this.fullName
+        }
+    }
+}
+console.log(obj.prop.getFullName()) //javascript 错误
+// 上面这一句代码的this指的是obj.prop，但是它并没有fullName属性所以输出 =>undefined
+var test = obj.prop.getFullName
+console.log(test()) // language
+```
+
+```js
+var name = 'window'
+var Tom = {
+    name: 'Tom',
+    showL: function () {
+        console.log(this.name)
+    },
+    wait: function () {
+        var fun = this.showL
+        fun()
+    }
+}
+Tom.wait() //=>'window
+```
+
+```js
+window.val = 1
+var json = {
+    val: 10,
+    dbl: function () {
+        this.val *= 2
+    }
+}
+json.dbl()
+var dbl = json.dbl
+dbl()
+json.dbl.call(window)
+alert(window.val + json.val) // => "24"
+```
+
+```js
+var num = 10
+var obj = {num: 20}
+obj.fn = (function(num){
+    this.num = num * 3 // 全局num = 60
+    num++              // 私有栈（自执行）num = 21
+    return function (n) {
+        this.num += n
+        num++
+        console.log(num)
+    }
+})(obj.num)
+var fn = obj.fn
+fn(5)  // 全局num=65，私有栈（自执行）num=22 => 22
+obj.fn(10) //obj.num = 30, => 23
+console.log(num,obj.num)// 65 30
+```
